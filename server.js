@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://aalogistics.vercel.app/",
+    origin: "https://logistics-hub-server.vercel.app/",
     methods: ["POST"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
