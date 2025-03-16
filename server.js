@@ -3,7 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const connectDB = require("./config/connectDB");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const rateLimit = require("express-rate-limit");
 
 dotenv.config();
@@ -12,18 +12,20 @@ connectDB();
 const app = express();
 // app.use(cors());
 app.use(express.json());
+app.use(
+  cors({
+    origin: "https://aalogistic.vercel.app",
+    methods: ["POST"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 // app.use(cors({
-//   origin: 'https://aalogistic.vercel.app',
-//   methods: ['POST'],
-//   credentials: true,
-//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   origin: 'http://localhost:3000', // Replace with your frontend's origin
+//   credentials: true, // Allow requests with credentials (cookies)
+//   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'] // Allowed methods (adjust as needed)
 // }));
-app.use(cors({
-  origin: 'http://localhost:3000', // Replace with your frontend's origin
-  credentials: true, // Allow requests with credentials (cookies)
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-  methods: ['GET', 'POST', 'PUT', 'DELETE'] // Allowed methods (adjust as needed)
-}));
 app.use(cookieParser());
 app.use(morgan("dev"));
 
@@ -35,7 +37,9 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require("./routes/userRoutes");
+const constantRouter = require("./routes/constantRoutes");
+app.use(constantRouter);
 app.use("/api/v1/users", userRoutes);
 
 const PORT = process.env.PORT || 8080;
